@@ -27,6 +27,7 @@ const Accordion = () => {
   const [tags, setTags] = useState([])
   const [tagName, setTagName] = useState('')
   const [tagID, setTagID] = useState('')
+  const [q, setQ] = useState('')
 
   // define the URL of the API endpoint
   const url = 'https://localhost:44325/api/Tag'
@@ -55,6 +56,14 @@ const Accordion = () => {
         console.log(error)
       })
   }
+  const data = Object.values(tags)
+
+  function search(items) {
+    return items.filter((item) => {
+      return item.tenTag.toString().toLowerCase().indexOf(q.toLowerCase()) > -1
+    })
+  }
+
   function handleUpdate(event) {
     event.preventDefault() // prevent the form from submitting normally
 
@@ -191,7 +200,15 @@ const Accordion = () => {
                     value={tagName}
                     disabled
                   />
-
+                  <CFormInput
+                    type="search"
+                    name="search-form"
+                    id="search-form"
+                    className="search-input"
+                    placeholder="Search for..."
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                  />
                   <CButton onClick={(e) => handleDelete(e, tagID)}>Delete</CButton>
                 </CForm>
               </CTabPane>
@@ -223,7 +240,7 @@ const Accordion = () => {
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {tags.map((item, index) => (
+            {search(data).map((item, index) => (
               <CTableRow key={index} onClick={() => handleRowClick(item)}>
                 {columns.map((column) => (
                   <CTableDataCell key={column.label}>{item[column.key]}</CTableDataCell>
