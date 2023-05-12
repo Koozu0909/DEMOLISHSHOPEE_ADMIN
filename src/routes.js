@@ -5,7 +5,11 @@ const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
 // Base
-const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
+const Tag = React.lazy(() => import('./views/base/tag/Tag'))
+const Brand = React.lazy(() => import('./views/base/brand/Brand'))
+const Origin = React.lazy(() => import('./views/base/origin/Origin'))
+const WarrantyType = React.lazy(() => import('./views/base/warrantytype/WarrantyType'))
+const WarrantyPeriod = React.lazy(() => import('./views/base/warrantyperiod/WarrantyPeriod'))
 const Breadcrumbs = React.lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'))
 const Cards = React.lazy(() => import('./views/base/cards/Cards'))
 const Carousels = React.lazy(() => import('./views/base/carousels/Carousels'))
@@ -57,7 +61,11 @@ const routes = [
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
   { path: '/base', name: 'Base', element: Cards, exact: true },
-  { path: '/base/accordion', name: 'Accordion', element: Accordion },
+  { path: '/base/tag', name: 'Tag', element: Tag },
+  { path: '/base/brand', name: 'Brand', element: Brand },
+  { path: '/base/origin', name: 'Origin', element: Origin },
+  { path: '/base/warrantytype', name: 'WarrantyType', element: WarrantyType },
+  { path: '/base/warrantyperiod', name: 'WarrantyPeriod', element: WarrantyPeriod },
   { path: '/base/breadcrumbs', name: 'Breadcrumbs', element: Breadcrumbs },
   { path: '/base/cards', name: 'Cards', element: Cards },
   { path: '/base/carousels', name: 'Carousel', element: Carousels },

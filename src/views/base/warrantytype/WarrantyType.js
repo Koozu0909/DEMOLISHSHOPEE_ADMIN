@@ -23,19 +23,19 @@ import {
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Accordion = () => {
-  const [tags, setTags] = useState([])
-  const [tagName, setTagName] = useState('')
-  const [tagID, setTagID] = useState('')
+const WarrantyType = () => {
+  const [warrantyTypes, setWarrantyTypes] = useState([])
+  const [warrantyTypeName, setWarrantyTypeName] = useState('')
+  const [warrantyTypeID, setWarrantyTypeID] = useState('')
   const [q, setQ] = useState('')
 
   // define the URL of the API endpoint
-  const url = 'https://localhost:44325/api/Tag'
+  const url = 'https://localhost:44325/api/WarrantyType'
   function handleSubmit(event) {
     event.preventDefault() // prevent the form from submitting normally
     // define the data you want to send
     const data = {
-      tenTag: tagName,
+      loaiBaoHanh: warrantyTypeName,
     }
     // set the request headers (optional)
     const headers = {
@@ -47,20 +47,20 @@ const Accordion = () => {
       .then((response) => {
         // handle success
         console.log(response.data)
-        setTags([...tags, response.data]) // add new tag to existing tags
+        setWarrantyTypes([...warrantyTypes, response.data]) // add new warrantytype to existing warrantyTypes
 
-        setTagName('') // clear the tagname input
+        setWarrantyTypeName('') // clear the warrantyTypeName input
       })
       .catch((error) => {
         // handle error
         console.log(error)
       })
   }
-  const data = Object.values(tags)
+  const data = Object.values(warrantyTypes)
 
   function search(items) {
     return items.filter((item) => {
-      return item.tenTag.toString().toLowerCase().indexOf(q.toLowerCase()) > -1
+      return item.loaiBaoHanh.toString().toLowerCase().indexOf(q.toLowerCase()) > -1
     })
   }
 
@@ -69,8 +69,8 @@ const Accordion = () => {
 
     // define the data you want to send
     const data = {
-      maTag: tagID,
-      tenTag: tagName,
+      maLoaiBaoHanh: warrantyTypeID,
+      loaiBaoHanh: warrantyTypeName,
     }
 
     // set the request headers (optional)
@@ -85,27 +85,27 @@ const Accordion = () => {
         // handle success
         console.log(response.data)
 
-        // update the state with the updated tag
-        setTags(
-          tags.map((tag) => {
-            if (tag.maTag === tagID) {
+        // update the state with the updated warrantytype
+        setWarrantyTypes(
+          warrantyTypes.map((warrantytype) => {
+            if (warrantytype.maLoaiBaoHanh === warrantyTypeID) {
               return {
-                ...tag,
-                tenTag: tagName,
+                ...warrantytype,
+                loaiBaoHanh: warrantyTypeName,
               }
             }
-            return tag
+            return warrantytype
           }),
         )
 
-        setTagName('') // clear the tagname input
+        setWarrantyTypeName('') // clear the warrantyTypeName input
       })
       .catch((error) => {
         // handle error
         console.log(error)
       })
   }
-  function handleDelete(event, tagID) {
+  function handleDelete(event, warrantyTypeID) {
     event.preventDefault() // prevent the form from submitting normally
     // define the data you want to send
     // set the request headers (optional)
@@ -114,12 +114,14 @@ const Accordion = () => {
     }
     // send a DELETE request
     axios
-      .delete(`https://localhost:44325/api/Tag/${tagID}`, { headers })
+      .delete(`https://localhost:44325/api/WarrantyType/${warrantyTypeID}`, { headers })
       .then((response) => {
         // handle success
         console.log(response.data)
-        setTags(tags.filter((tag) => tag.maTag !== tagID)) // remove deleted tag from existing tags
-        setTagName('') // clear the tagname input
+        setWarrantyTypes(
+          warrantyTypes.filter((warrantytype) => warrantytype.maLoaiBaoHanh !== warrantyTypeID),
+        ) // remove deleted warrantytype from existing warrantyTypes
+        setWarrantyTypeName('') // clear the warrantyTypeName input
       })
       .catch((error) => {
         // handle error
@@ -130,44 +132,56 @@ const Accordion = () => {
     axios
       .get(url)
       .then((response) => {
-        setTags(response.data)
+        setWarrantyTypes(response.data)
       })
       .catch((error) => {
         console.error(error)
       })
   }, [])
   const columns = [
-    { key: 'maTag', label: 'MaTag', _props: { scope: 'col' } },
-    { key: 'tenTag', label: 'TenTag', _props: { scope: 'col' } },
+    { key: 'maLoaiBaoHanh', label: 'MaLoaiBaoHanh', _props: { scope: 'col' } },
+    { key: 'loaiBaoHanh', label: 'LoaiBaoHanh', _props: { scope: 'col' } },
   ]
 
   const [activeKey, setActiveKey] = useState(1)
   function handleRowClick(item) {
-    console.log(item.maTag)
-    setTagID(item.maTag)
-    setTagName(item.tenTag)
+    console.log(item.maLoaiBaoHanh)
+    setWarrantyTypeID(item.maLoaiBaoHanh)
+    setWarrantyTypeName(item.loaiBaoHanh)
   }
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>Tags</strong>
+            <strong>WarrantyTypes</strong>
           </CCardHeader>
           <CCardBody>
             <CNav variant="tabs" role="tablist">
               <CNavItem>
-                <CNavLink active={activeKey === 1} onClick={() => setActiveKey(1)}>
+                <CNavLink
+                  style={{ cursor: 'pointer' }}
+                  active={activeKey === 1}
+                  onClick={() => setActiveKey(1)}
+                >
                   Add
                 </CNavLink>
               </CNavItem>
               <CNavItem>
-                <CNavLink active={activeKey === 2} onClick={() => setActiveKey(2)}>
+                <CNavLink
+                  style={{ cursor: 'pointer' }}
+                  active={activeKey === 2}
+                  onClick={() => setActiveKey(2)}
+                >
                   Delete
                 </CNavLink>
               </CNavItem>
               <CNavItem>
-                <CNavLink active={activeKey === 3} onClick={() => setActiveKey(3)}>
+                <CNavLink
+                  style={{ cursor: 'pointer' }}
+                  active={activeKey === 3}
+                  onClick={() => setActiveKey(3)}
+                >
                   Update
                 </CNavLink>
               </CNavItem>
@@ -176,13 +190,14 @@ const Accordion = () => {
               <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={activeKey === 1}>
                 <CForm onSubmit={handleSubmit}>
                   <CFormInput
+                    className="form-input"
                     type="text"
                     id="exampleFormControlInput1"
-                    label="Add Tag"
+                    label="Add warrantytype"
                     placeholder="Add here"
                     aria-describedby="exampleFormControlInputHelpInline"
-                    value={tagName}
-                    onChange={(event) => setTagName(event.target.value)}
+                    value={warrantyTypeName}
+                    onChange={(event) => setWarrantyTypeName(event.target.value)}
                   />
                   <CButton type="submit" color="success">
                     Add
@@ -193,35 +208,46 @@ const Accordion = () => {
                 <CForm>
                   <CFormInput
                     type="text"
+                    className="form-input"
                     id="exampleFormControlInput1"
-                    label="Delete Tag"
-                    placeholder="Choice Tag To Delete"
+                    label="Delete warrantytype"
+                    placeholder="Choice warrantytype To Delete"
                     aria-describedby="exampleFormControlInputHelpInline"
-                    value={tagName}
+                    value={warrantyTypeName}
                     disabled
                   />
                   <CFormInput
                     type="search"
+                    className="form-input"
                     name="search-form"
                     id="search-form"
-                    className="search-input"
                     placeholder="Search for..."
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
                   />
-                  <CButton onClick={(e) => handleDelete(e, tagID)}>Delete</CButton>
+                  <CButton onClick={(e) => handleDelete(e, warrantyTypeID)}>Delete</CButton>
                 </CForm>
               </CTabPane>
               <CTabPane role="tabpanel" aria-labelledby="contact-tab" visible={activeKey === 3}>
                 <CForm onSubmit={handleUpdate}>
                   <CFormInput
                     type="text"
+                    className="form-input"
                     id="exampleFormControlInput1"
-                    label="Add Tag"
+                    label="Add warrantytype"
                     placeholder="Add here"
                     aria-describedby="exampleFormControlInputHelpInline"
-                    value={tagName}
-                    onChange={(event) => setTagName(event.target.value)}
+                    value={warrantyTypeName}
+                    onChange={(event) => setWarrantyTypeName(event.target.value)}
+                  />
+                  <CFormInput
+                    type="search"
+                    className="form-input"
+                    name="search-form"
+                    id="search-form"
+                    placeholder="Search for..."
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
                   />
                   <CButton type="submit" color="success">
                     Update
@@ -232,18 +258,26 @@ const Accordion = () => {
           </CCardBody>
         </CCard>
         <CTable hover>
-          <CTableHead>
-            <CTableRow>
+          <CTableHead class="thead-default">
+            <CTableRow style={{ border: '3px solid black' }}>
               {columns.map((column) => (
-                <CTableHeaderCell key={column.key}>{column.label}</CTableHeaderCell>
+                <CTableHeaderCell style={{ border: '3px solid black' }} key={column.key}>
+                  {column.label}
+                </CTableHeaderCell>
               ))}
             </CTableRow>
           </CTableHead>
           <CTableBody>
             {search(data).map((item, index) => (
-              <CTableRow key={index} onClick={() => handleRowClick(item)}>
+              <CTableRow
+                style={{ border: '3px solid black' }}
+                key={index}
+                onClick={() => handleRowClick(item)}
+              >
                 {columns.map((column) => (
-                  <CTableDataCell key={column.label}>{item[column.key]}</CTableDataCell>
+                  <CTableDataCell style={{ border: '3px solid black' }} key={column.label}>
+                    {item[column.key]}
+                  </CTableDataCell>
                 ))}
               </CTableRow>
             ))}
@@ -254,4 +288,4 @@ const Accordion = () => {
   )
 }
 
-export default Accordion
+export default WarrantyType

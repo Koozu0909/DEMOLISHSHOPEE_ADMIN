@@ -55,73 +55,93 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Tags API',
-        to: '/base/accordion',
+        to: '/base/tag',
       },
       {
         component: CNavItem,
-        name: 'Breadcrumb',
-        to: '/base/breadcrumbs',
+        name: 'Brands API',
+        to: '/base/brand',
       },
       {
         component: CNavItem,
-        name: 'Cards',
-        to: '/base/cards',
+        name: 'Origins API',
+        to: '/base/origin',
       },
       {
         component: CNavItem,
-        name: 'Carousel',
-        to: '/base/carousels',
+        name: 'WarrantyTypes API',
+        to: '/base/warrantytype',
       },
       {
         component: CNavItem,
-        name: 'Collapse',
-        to: '/base/collapses',
+        name: 'WarrantyPeriods API',
+        to: '/base/warrantyperiod',
       },
-      {
-        component: CNavItem,
-        name: 'List group',
-        to: '/base/list-groups',
-      },
-      {
-        component: CNavItem,
-        name: 'Navs & Tabs',
-        to: '/base/navs',
-      },
-      {
-        component: CNavItem,
-        name: 'Pagination',
-        to: '/base/paginations',
-      },
-      {
-        component: CNavItem,
-        name: 'Placeholders',
-        to: '/base/placeholders',
-      },
-      {
-        component: CNavItem,
-        name: 'Popovers',
-        to: '/base/popovers',
-      },
-      {
-        component: CNavItem,
-        name: 'Progress',
-        to: '/base/progress',
-      },
-      {
-        component: CNavItem,
-        name: 'Spinners',
-        to: '/base/spinners',
-      },
-      {
-        component: CNavItem,
-        name: 'Tables',
-        to: '/base/tables',
-      },
-      {
-        component: CNavItem,
-        name: 'Tooltips',
-        to: '/base/tooltips',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Breadcrumb',
+      //   to: '/base/breadcrumbs',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Cards',
+      //   to: '/base/cards',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Carousel',
+      //   to: '/base/carousels',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Collapse',
+      //   to: '/base/collapses',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'List group',
+      //   to: '/base/list-groups',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Navs & Tabs',
+      //   to: '/base/navs',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Pagination',
+      //   to: '/base/paginations',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Placeholders',
+      //   to: '/base/placeholders',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Popovers',
+      //   to: '/base/popovers',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Progress',
+      //   to: '/base/progress',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Spinners',
+      //   to: '/base/spinners',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Tables',
+      //   to: '/base/tables',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Tooltips',
+      //   to: '/base/tooltips',
+      // },
     ],
   },
   {
