@@ -54,7 +54,7 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: 'Accordion',
+        name: 'Tags API',
         to: '/base/accordion',
       },
       {

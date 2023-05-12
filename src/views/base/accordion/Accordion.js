@@ -5,170 +5,233 @@ import {
   CCardHeader,
   CCol,
   CRow,
-  CAccordion,
-  CAccordionBody,
-  CAccordionHeader,
-  CAccordionItem,
+  CNav,
+  CNavItem,
+  CTabPane,
+  CNavLink,
+  CTabContent,
+  CTable,
+  CForm,
+  CFormInput,
+  CTableHead,
+  CTableRow,
+  CTableHeaderCell,
+  CTableBody,
+  CTableDataCell,
+  CButton,
 } from '@coreui/react'
-import { DocsExample } from 'src/components'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Accordion = () => {
+  const [tags, setTags] = useState([])
+  const [tagName, setTagName] = useState('')
+  const [tagID, setTagID] = useState('')
+
+  // define the URL of the API endpoint
+  const url = 'https://localhost:44325/api/Tag'
+  function handleSubmit(event) {
+    event.preventDefault() // prevent the form from submitting normally
+    // define the data you want to send
+    const data = {
+      tenTag: tagName,
+    }
+    // set the request headers (optional)
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+    // send a POST request
+    axios
+      .post(url, data, { headers })
+      .then((response) => {
+        // handle success
+        console.log(response.data)
+        setTags([...tags, response.data]) // add new tag to existing tags
+
+        setTagName('') // clear the tagname input
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error)
+      })
+  }
+  function handleUpdate(event) {
+    event.preventDefault() // prevent the form from submitting normally
+
+    // define the data you want to send
+    const data = {
+      maTag: tagID,
+      tenTag: tagName,
+    }
+
+    // set the request headers (optional)
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+
+    // send a PUT request
+    axios
+      .put(url, data, { headers })
+      .then((response) => {
+        // handle success
+        console.log(response.data)
+
+        // update the state with the updated tag
+        setTags(
+          tags.map((tag) => {
+            if (tag.maTag === tagID) {
+              return {
+                ...tag,
+                tenTag: tagName,
+              }
+            }
+            return tag
+          }),
+        )
+
+        setTagName('') // clear the tagname input
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error)
+      })
+  }
+  function handleDelete(event, tagID) {
+    event.preventDefault() // prevent the form from submitting normally
+    // define the data you want to send
+    // set the request headers (optional)
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+    // send a DELETE request
+    axios
+      .delete(`https://localhost:44325/api/Tag/${tagID}`, { headers })
+      .then((response) => {
+        // handle success
+        console.log(response.data)
+        setTags(tags.filter((tag) => tag.maTag !== tagID)) // remove deleted tag from existing tags
+        setTagName('') // clear the tagname input
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error)
+      })
+  }
+  useEffect(() => {
+    axios
+      .get(url)
+      .then((response) => {
+        setTags(response.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }, [])
+  const columns = [
+    { key: 'maTag', label: 'MaTag', _props: { scope: 'col' } },
+    { key: 'tenTag', label: 'TenTag', _props: { scope: 'col' } },
+  ]
+
+  const [activeKey, setActiveKey] = useState(1)
+  function handleRowClick(item) {
+    console.log(item.maTag)
+    setTagID(item.maTag)
+    setTagName(item.tenTag)
+  }
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="mb-4">
           <CCardHeader>
-            <strong>React Accordion</strong>
+            <strong>Tags</strong>
           </CCardHeader>
           <CCardBody>
-            <p className="text-medium-emphasis small">
-              Click the accordions below to expand/collapse the accordion content.
-            </p>
-            <DocsExample href="components/accordion">
-              <CAccordion activeItemKey={2}>
-                <CAccordionItem itemKey={1}>
-                  <CAccordionHeader>Accordion Item #1</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the first item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={2}>
-                  <CAccordionHeader>Accordion Item #2</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={3}>
-                  <CAccordionHeader>Accordion Item #3</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-              </CAccordion>
-            </DocsExample>
+            <CNav variant="tabs" role="tablist">
+              <CNavItem>
+                <CNavLink active={activeKey === 1} onClick={() => setActiveKey(1)}>
+                  Add
+                </CNavLink>
+              </CNavItem>
+              <CNavItem>
+                <CNavLink active={activeKey === 2} onClick={() => setActiveKey(2)}>
+                  Delete
+                </CNavLink>
+              </CNavItem>
+              <CNavItem>
+                <CNavLink active={activeKey === 3} onClick={() => setActiveKey(3)}>
+                  Update
+                </CNavLink>
+              </CNavItem>
+            </CNav>
+            <CTabContent>
+              <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={activeKey === 1}>
+                <CForm onSubmit={handleSubmit}>
+                  <CFormInput
+                    type="text"
+                    id="exampleFormControlInput1"
+                    label="Add Tag"
+                    placeholder="Add here"
+                    aria-describedby="exampleFormControlInputHelpInline"
+                    value={tagName}
+                    onChange={(event) => setTagName(event.target.value)}
+                  />
+                  <CButton type="submit" color="success">
+                    Add
+                  </CButton>
+                </CForm>
+              </CTabPane>
+              <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={activeKey === 2}>
+                <CForm>
+                  <CFormInput
+                    type="text"
+                    id="exampleFormControlInput1"
+                    label="Delete Tag"
+                    placeholder="Choice Tag To Delete"
+                    aria-describedby="exampleFormControlInputHelpInline"
+                    value={tagName}
+                    disabled
+                  />
+
+                  <CButton onClick={(e) => handleDelete(e, tagID)}>Delete</CButton>
+                </CForm>
+              </CTabPane>
+              <CTabPane role="tabpanel" aria-labelledby="contact-tab" visible={activeKey === 3}>
+                <CForm onSubmit={handleUpdate}>
+                  <CFormInput
+                    type="text"
+                    id="exampleFormControlInput1"
+                    label="Add Tag"
+                    placeholder="Add here"
+                    aria-describedby="exampleFormControlInputHelpInline"
+                    value={tagName}
+                    onChange={(event) => setTagName(event.target.value)}
+                  />
+                  <CButton type="submit" color="success">
+                    Update
+                  </CButton>
+                </CForm>
+              </CTabPane>
+            </CTabContent>
           </CCardBody>
         </CCard>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Accordion</strong> <small>Flush</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-medium-emphasis small">
-              Add <code>flush</code> to remove the default <code>background-color</code>, some
-              borders, and some rounded corners to render accordions edge-to-edge with their parent
-              container.
-            </p>
-            <DocsExample href="components/accordion#flush">
-              <CAccordion flush>
-                <CAccordionItem itemKey={1}>
-                  <CAccordionHeader>Accordion Item #1</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the first item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={2}>
-                  <CAccordionHeader>Accordion Item #2</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={3}>
-                  <CAccordionHeader>Accordion Item #3</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-              </CAccordion>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Accordion</strong> <small>Always open</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-medium-emphasis small">
-              Add <code>alwaysOpen</code> property to make accordion items stay open when another
-              item is opened.
-            </p>
-            <DocsExample href="components/accordion#flush">
-              <CAccordion alwaysOpen>
-                <CAccordionItem itemKey={1}>
-                  <CAccordionHeader>Accordion Item #1</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the first item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={2}>
-                  <CAccordionHeader>Accordion Item #2</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={3}>
-                  <CAccordionHeader>Accordion Item #3</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-              </CAccordion>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
+        <CTable hover>
+          <CTableHead>
+            <CTableRow>
+              {columns.map((column) => (
+                <CTableHeaderCell key={column.key}>{column.label}</CTableHeaderCell>
+              ))}
+            </CTableRow>
+          </CTableHead>
+          <CTableBody>
+            {tags.map((item, index) => (
+              <CTableRow key={index} onClick={() => handleRowClick(item)}>
+                {columns.map((column) => (
+                  <CTableDataCell key={column.label}>{item[column.key]}</CTableDataCell>
+                ))}
+              </CTableRow>
+            ))}
+          </CTableBody>
+        </CTable>
       </CCol>
     </CRow>
   )
