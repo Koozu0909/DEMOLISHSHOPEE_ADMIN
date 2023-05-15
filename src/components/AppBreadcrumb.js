@@ -32,7 +32,9 @@ const AppBreadcrumb = () => {
   const breadcrumbs = getBreadcrumbs(currentLocation)
 
   return (
+    /// this is a component render navbar of each page in side content
     <CBreadcrumb className="m-0 ms-2">
+      {/* <h1>CBreadcrumb dang vy khoi</h1> */}
       <CBreadcrumbItem href="/">Home</CBreadcrumbItem>
       {breadcrumbs.map((breadcrumb, index) => {
         return (

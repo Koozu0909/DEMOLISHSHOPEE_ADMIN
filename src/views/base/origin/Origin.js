@@ -31,6 +31,7 @@ const Origin = () => {
 
   // define the URL of the API endpoint
   const url = 'https://localhost:44325/api/Origin'
+
   function handleSubmit(event) {
     event.preventDefault() // prevent the form from submitting normally
     // define the data you want to send
