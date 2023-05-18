@@ -1,0 +1,17 @@
+.btn-image {
+  padding: 5px 10px;
+  background-color: rgb(210, 210, 210);
+  opacity: 0.7;
+  position: absolute;
+  bottom: -42%;
+  right: 0;
+  width: 100%;
+  border: none;
+}
+.img-product {
+  position: relative;
+  overflow: hidden;
+}
+.img-product:hover .btn-image {
+  bottom: 0;
+}

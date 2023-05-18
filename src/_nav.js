@@ -82,11 +82,18 @@ const _nav = [
         name: 'Categories API',
         to: '/base/categories',
       },
-      // {
-      //   component: CNavItem,
-      //   name: 'Breadcrumb',
-      //   to: '/base/breadcrumbs',
-      // },
+      {
+        component: CNavGroup,
+        name: 'Product',
+        to: '/base/products',
+        items: [
+          {
+            component: CNavItem,
+            name: 'Add Product',
+            to: '/base/products/addproduct',
+          },
+        ],
+      },
       // {
       //   component: CNavItem,
       //   name: 'Cards',
