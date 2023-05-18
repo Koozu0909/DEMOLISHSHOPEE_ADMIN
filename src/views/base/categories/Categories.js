@@ -35,6 +35,9 @@ const Categories = () => {
   const [selectedFile, setSelectedFile] = useState(null)
   const [viewImage, setViewImage] = useState(null)
   const [viewFirst, setViewFirst] = useState(null)
+
+  const [selectedCategoryId, setSelectedCategoryId] = useState(0)
+  const [selectedSubCategoryId, setSelectedSubCategoryId] = useState(0)
   // Delete
   const [deleteID, setDeleteID] = useState(0)
   const roles = [
@@ -57,7 +60,12 @@ const Categories = () => {
   function handleSubmit(event) {
     event.preventDefault() // prevent the form from submitting normally
     const formData = new FormData()
-    formData.append('image', selectedFile) // fileInput là đối tượng input file
+    console.log(selectedFile)
+    if (selectedFile === null) {
+      formData.append('image', null)
+    } else {
+      formData.append('image', selectedFile) // fileInput là đối tượng input file
+    }
     formData.append('parent', parentID)
     formData.append('role', roleID)
     formData.append('tenLoaiSp', categoriesName)
@@ -78,6 +86,8 @@ const Categories = () => {
         setViewFirst(null)
         setSelectedFile(null)
         setCategoriesName('') // clear the categoriesname input
+        setSelectedCategoryId(0)
+        setSelectedSubCategoryId(0)
       })
       .catch((error) => {
         // handle error
@@ -95,7 +105,12 @@ const Categories = () => {
   function handleUpdate(event) {
     event.preventDefault() // prevent the form from submitting normally
     const formData = new FormData()
-    formData.append('image', selectedFile) // fileInput là đối tượng input file
+    console.log(selectedFile)
+    if (selectedFile === null) {
+      formData.append('image', null)
+    } else {
+      formData.append('image', selectedFile) // fileInput là đối tượng input file
+    }
     formData.append('tenLoaiSp', categoriesName)
     formData.append('maLoaiSp', categoriesID)
 
@@ -186,9 +201,6 @@ const Categories = () => {
     setCategoriesName(item.tenLoaiSp)
     setViewImage('https://localhost:44325/api/Categories/images/' + item.imagePath)
   }
-
-  const [selectedCategoryId, setSelectedCategoryId] = useState('')
-  const [selectedSubCategoryId, setSelectedSubCategoryId] = useState('')
 
   function handleChange(event) {
     setSelectedCategoryId(event.target.value)
