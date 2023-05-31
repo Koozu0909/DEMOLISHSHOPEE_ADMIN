@@ -77,11 +77,23 @@ const _nav = [
         name: 'WarrantyPeriods API',
         to: '/base/warrantyperiod',
       },
-      // {
-      //   component: CNavItem,
-      //   name: 'Breadcrumb',
-      //   to: '/base/breadcrumbs',
-      // },
+      {
+        component: CNavItem,
+        name: 'Categories API',
+        to: '/base/categories',
+      },
+      {
+        component: CNavGroup,
+        name: 'Product',
+        to: '/base/products',
+        items: [
+          {
+            component: CNavItem,
+            name: 'Add Product',
+            to: '/base/products/addproduct',
+          },
+        ],
+      },
       // {
       //   component: CNavItem,
       //   name: 'Cards',
