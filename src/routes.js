@@ -11,6 +11,7 @@ const Origin = React.lazy(() => import('./views/base/origin/Origin'))
 const WarrantyType = React.lazy(() => import('./views/base/warrantytype/WarrantyType'))
 const WarrantyPeriod = React.lazy(() => import('./views/base/warrantyperiod/WarrantyPeriod'))
 const Categories = React.lazy(() => import('./views/base/categories/Categories'))
+const Description = React.lazy(() => import('./views/base/description/Description'))
 // Product
 const Product = React.lazy(() => import('./views/base/products/addproduct/AddProduct'))
 
@@ -65,14 +66,16 @@ const routes = [
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
   { path: '/base', name: 'Base', element: Cards, exact: true },
+  // here is where we do of base
   { path: '/base/tag', name: 'Tag', element: Tag },
   { path: '/base/brand', name: 'Brand', element: Brand },
   { path: '/base/origin', name: 'Origin', element: Origin },
   { path: '/base/warrantytype', name: 'WarrantyType', element: WarrantyType },
   { path: '/base/warrantyperiod', name: 'WarrantyPeriod', element: WarrantyPeriod },
   { path: '/base/categories', name: 'Categories', element: Categories },
+  { path: '/base/description', name: 'Description', element: Description },
+  // end base
   { path: '/base/products/addproduct', name: 'Product', element: Product },
-
   { path: '/base/breadcrumbs', name: 'Breadcrumbs', element: Breadcrumbs },
   { path: '/base/cards', name: 'Cards', element: Cards },
   { path: '/base/carousels', name: 'Carousel', element: Carousels },
