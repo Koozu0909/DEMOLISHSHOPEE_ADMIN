@@ -30,7 +30,9 @@ function Description() {
   const [idProduct, setIdProduct] = useState()
   const [description, setDescription] = useState('')
   const [listDescription, setListDescription] = useState([])
-
+  const [searchItem, setSearchItem] = useState(null)
+  const [searchKey, setSearchKey] = useState()
+  const [selectItem, setSelectItem] = useState()
   const columns = [
     { key: 'maSp', label: 'Mã Sản Phẩm', _props: { scope: 'col' } },
     { key: 'moTa', label: 'Mô Tả', _props: { scope: 'col' } },
@@ -87,7 +89,56 @@ function Description() {
     console.log(event.target.value)
     setDescription(event.target.value)
   }
+  // handle search
+  function handleSearch(event) {
+    event.preventDefault()
+    if (event.target.value === '') {
+      setSearchItem(null)
+      setSearchKey('')
+      return
+    }
+    // set search key
+    const searchKey = event.target.value
+    setSearchKey(searchKey)
 
+    // find the item with matching 'maSp'
+    const tmpSearch = listDescription.find((element) => element.maSp == searchKey)
+
+    if (tmpSearch) {
+      console.log(tmpSearch)
+      setSearchItem(tmpSearch)
+    } else {
+      console.log('Không tìm thấy')
+      setSearchItem(null)
+    }
+  }
+
+  function handleRowClick(item) {
+    // event.preventDefault()
+    console.log(item)
+    console.log(selectItem)
+    setSelectItem(item)
+  }
+
+  // handle deltete description after select item want to delete
+  function handleDeleteDescription() {
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+    // send a DELETE request
+    axios
+      .delete(`${url}/${selectItem.maMoTa}`, { headers })
+      .then((response) => {
+        // handle success
+        console.log(response.data)
+        setListDescription(listDescription.filter((des) => des.maMoTa !== selectItem.maMoTa)) // remove deleted brand from existing brands
+        setSearchItem(null)
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error)
+      })
+  }
   return (
     <CRow>
       <CCol xs={12}>
@@ -158,23 +209,21 @@ function Description() {
               <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={activeKey === 2}>
                 <CForm>
                   <CFormInput
-                    type="text"
-                    className="form-input"
-                    id="exampleFormControlInput1"
-                    label="Delete Tag"
-                    placeholder="Choice Tag To Delete"
-                    aria-describedby="exampleFormControlInputHelpInline"
-                    disabled
-                  />
-                  <CFormInput
                     type="search"
+                    label="Search"
                     className="form-input"
                     name="search-form"
                     id="search-form"
-                    placeholder="Search for..."
-                    // onChange={(e) => setQ(e.target.value)}
+                    placeholder="Search ID product..."
+                    onChange={handleSearch}
+                    value={searchKey}
                   />
-                  <CButton>Delete</CButton>
+                  <label style={{ display: 'block' }}>
+                    Select the item want to delete description
+                  </label>
+                  <CButton color="success" onClick={handleDeleteDescription}>
+                    Delete
+                  </CButton>
                 </CForm>
               </CTabPane>
               <CTabPane role="tabpanel" aria-labelledby="contact-tab" visible={activeKey === 3}>
@@ -182,19 +231,19 @@ function Description() {
                   <CFormInput
                     type="text"
                     className="form-input"
-                    id="exampleFormControlInput1"
-                    label="Add Tag"
-                    placeholder="Add here"
+                    id="IDProductToChange"
+                    label="Select the item want to update"
+                    placeholder="ID Product"
                     aria-describedby="exampleFormControlInputHelpInline"
                   />
-                  <CFormInput
-                    type="search"
-                    className="form-input"
-                    name="search-form"
-                    id="search-form"
-                    placeholder="Search for..."
-                    // value={q}
-                  />
+                  <CFormTextarea
+                    id="exampleFormControlTextarea1"
+                    label="Input Description of Product"
+                    rows={3}
+                    text="Must be 8-20 words long."
+                    // value={}
+                    onChange={handleInputDescription}
+                  ></CFormTextarea>
                   <CButton type="submit" color="success">
                     Update
                   </CButton>
@@ -215,19 +264,38 @@ function Description() {
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {listDescription.map((item, index) => (
+            {searchItem == null ? (
+              listDescription.map((item, index) => (
+                <CTableRow
+                  style={{
+                    border: '3px solid black',
+                    background: selectItem && selectItem.maSp == item.maSp ? 'red' : 'white',
+                  }}
+                  key={index}
+                  onClick={() => handleRowClick(item)}
+                >
+                  {columns.map((column) => (
+                    <CTableDataCell style={{ border: '3px solid black' }} key={column.label}>
+                      {item[column.key]}
+                    </CTableDataCell>
+                  ))}
+                </CTableRow>
+              ))
+            ) : (
               <CTableRow
-                style={{ border: '3px solid black' }}
-                key={index}
-                // onClick={() => handleRowClick(item)}
+                style={{
+                  border: '3px solid black',
+                  background: selectItem && selectItem.maSp == searchItem.maSp ? 'red' : 'white',
+                }}
+                onClick={() => handleRowClick(searchItem)}
               >
                 {columns.map((column) => (
                   <CTableDataCell style={{ border: '3px solid black' }} key={column.label}>
-                    {item[column.key]}
+                    {searchItem[column.key]}
                   </CTableDataCell>
-                ))}
+                ))}{' '}
               </CTableRow>
-            ))}
+            )}
           </CTableBody>
         </CTable>
       </CCol>
