@@ -87,6 +87,12 @@ const _nav = [
         name: 'Description API',
         to: '/base/description',
       },
+
+      {
+        component: CNavItem,
+        name: 'ImageProduct API',
+        to: '/base/imageproduct',
+      },
       {
         component: CNavGroup,
         name: 'Product',

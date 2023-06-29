@@ -139,6 +139,53 @@ function Description() {
         console.log(error)
       })
   }
+
+  //funtion handle update description
+  function handleUpdateInputDescription(event) {
+    event.preventDefault()
+    setSelectItem((prevItem) => ({
+      ...prevItem,
+      moTa: event.target.value,
+    }))
+    // console.log(selectItem)
+  }
+  // funtion pust update description
+  function handleUpdateDescription(event) {
+    event.preventDefault() // prevent the form from submitting normally
+
+    // define the data you want to send
+    const data = {
+      maMoTa: selectItem.maMoTa,
+      maSp: selectItem.maSp,
+      moTa: selectItem.moTa,
+    }
+
+    // set the request headers (optional)
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+
+    // send a PUT request
+    axios
+      .put(url, data, { headers })
+      .then((response) => {
+        // handle success
+        console.log(response.data)
+        const newListDescription = [...listDescription]
+        newListDescription.forEach((h) => {
+          if (h.maMoTa === response.data.maMoTa) {
+            h.moTa = response.data.moTa
+          }
+        })
+        setListDescription(newListDescription)
+
+        setSearchItem(null)
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error)
+      })
+  }
   return (
     <CRow>
       <CCol xs={12}>
@@ -235,16 +282,18 @@ function Description() {
                     label="Select the item want to update"
                     placeholder="ID Product"
                     aria-describedby="exampleFormControlInputHelpInline"
+                    readOnly
+                    value={selectItem ? selectItem.maSp : searchItem}
                   />
                   <CFormTextarea
                     id="exampleFormControlTextarea1"
                     label="Input Description of Product"
                     rows={3}
                     text="Must be 8-20 words long."
-                    // value={}
-                    onChange={handleInputDescription}
+                    value={selectItem ? selectItem.moTa : searchItem}
+                    onChange={handleUpdateInputDescription}
                   ></CFormTextarea>
-                  <CButton type="submit" color="success">
+                  <CButton type="submit" color="success" onClick={handleUpdateDescription}>
                     Update
                   </CButton>
                 </CForm>

@@ -12,6 +12,7 @@ const WarrantyType = React.lazy(() => import('./views/base/warrantytype/Warranty
 const WarrantyPeriod = React.lazy(() => import('./views/base/warrantyperiod/WarrantyPeriod'))
 const Categories = React.lazy(() => import('./views/base/categories/Categories'))
 const Description = React.lazy(() => import('./views/base/description/Description'))
+const ImageProduct = React.lazy(() => import('./views/base/imageproduct/ImageProduct'))
 // Product
 const Product = React.lazy(() => import('./views/base/products/addproduct/AddProduct'))
 
@@ -74,6 +75,7 @@ const routes = [
   { path: '/base/warrantyperiod', name: 'WarrantyPeriod', element: WarrantyPeriod },
   { path: '/base/categories', name: 'Categories', element: Categories },
   { path: '/base/description', name: 'Description', element: Description },
+  { path: '/base/imageproduct', name: 'ImageProduct', element: ImageProduct },
   // end base
   { path: '/base/products/addproduct', name: 'Product', element: Product },
   { path: '/base/breadcrumbs', name: 'Breadcrumbs', element: Breadcrumbs },
